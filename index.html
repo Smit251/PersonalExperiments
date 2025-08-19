@@ -311,9 +311,15 @@
             let returnsChart;
 
             // --- DATA (Updated August 2025) ---
-            let latestTBillRates = {
-                4: 4.354, 8: 4.271, 13: 4.232, 17: 4.162, 26: 4.081, 52: 3.924
-            };
+            let latestTBillRates = { 
+                        4: 4.35,
+                        8: 4.27,   // Estimate based on surrounding rates
+                        13: 4.23,
+                        17: 4.16,
+                        26: 4.08,
+                        52: 3.92
+                    };
+
             const standardDeductions2025 = {
                 single: 14600, marriedFilingJointly: 29200,
                 marriedFilingSeparately: 14600, headOfHousehold: 21900
@@ -611,3 +617,4 @@
     </script>
 </body>
 </html>
+
