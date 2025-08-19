@@ -1,55 +1,82 @@
-Safe Haven Savings Comparator
-A professional financial calculator to compare the after-tax returns of Certificate of Deposit (CD) and Treasury Bill (T-Bill) investment strategies.
+# Safe Haven Savings Comparator  
 
-Overview
-Safe Haven helps users make informed decisions by providing a side-by-side comparison of after-tax returns for a single CD versus a T-Bill reinvestment (ladder) strategy. The calculator uses projected 2025 federal tax brackets, state-specific tax settings, and an AGI-based calculation model to provide a precise and personalized analysis.
+_A professional financial calculator to compare the after-tax returns of Certificate of Deposit (CD) and Treasury Bill (T-Bill) investment strategies._  
 
-Key Features
-CD vs. T-Bill Comparison: See a clear, side-by-side breakdown of potential after-tax returns.
+---
 
-Advanced Tax Calculations:
+## 📖 Overview  
+**Safe Haven** helps users make informed decisions by providing a **side-by-side comparison** of after-tax returns for:  
+- A single **CD** investment  
+- A **T-Bill reinvestment (ladder) strategy**  
 
-Uses projected 2025 federal tax brackets and standard deductions.
+The calculator uses **projected 2025 federal tax brackets**, **state-specific tax settings**, and an **AGI-based model** to deliver a precise, personalized analysis.  
 
-Calculates Adjusted Gross Income (AGI) based on your inputs.
+---
 
-Includes configurable marginal tax rates for major states.
+## ✨ Key Features  
 
-Correctly applies the state and local tax exemption for T-Bill interest.
+- **CD vs. T-Bill Comparison**  
+  Clear, side-by-side breakdown of potential after-tax returns.  
 
-T-Bill Ladder Modeling: Configure a reinvestment strategy by frequency (4-week to 52-week) and model future rate changes.
+- **Advanced Tax Calculations**  
+  - Uses projected **2025 federal tax brackets** and **standard deductions**  
+  - Calculates **Adjusted Gross Income (AGI)** based on user inputs  
+  - Configurable **marginal tax rates** for major states  
+  - Correctly applies **state & local tax exemption** for T-Bill interest  
 
-Up-to-Date Rates: Pre-loaded with recent, real-world CD rates from major banks (Marcus, Discover, Capital One) and the latest T-Bill auction investment rates.
+- **T-Bill Ladder Modeling**  
+  Configure reinvestment strategies by frequency (4-week to 52-week) and model **future rate changes**.  
 
-Interactive Visualization: A dynamic chart visualizes the growth of after-tax returns for both investment types over the selected time period.
+- **Up-to-Date Rates**  
+  Pre-loaded with recent CD rates from **Marcus, Discover, Capital One**, and the latest **T-Bill auction rates** (as of mid-August 2025).  
 
-Transparent Breakdown: A collapsible section shows all the key inputs and calculated values (AGI, taxable income, marginal rates, etc.) used in the comparison.
+- **Interactive Visualization**  
+  Dynamic charts showing growth of **after-tax returns** for both investment types.  
 
-Responsive & Themed UI: A clean, modern interface with light and dark mode support that works seamlessly on desktop and mobile devices.
+- **Transparent Breakdown**  
+  Collapsible section with inputs and calculated values (AGI, taxable income, marginal rates, etc.).  
 
-How to Use
-As a single index.html file, the application is incredibly simple to run.
+- **Responsive & Themed UI**  
+  Modern interface with **light/dark mode**, optimized for both desktop and mobile.  
 
-Open the index.html file in any modern web browser.
+---
 
-Enter your Tax Profile: annual gross income, filing status, and any pre-tax deductions (like 401k/HSA contributions).
+## 🚀 How to Use  
 
-Enter your Investment Amount.
+1. Open **`index.html`** in any modern web browser.  
+2. Enter your **Tax Profile**: annual gross income, filing status, and any pre-tax deductions (401k/HSA, etc.).  
+3. Enter your **Investment Amount**.  
+4. Select a **CD Option** (sets the rate & time period for comparison).  
+5. Configure the **T-Bill Strategy**: reinvestment frequency and projected rate changes.  
+6. Review results in:  
+   - **Summary cards**  
+   - **Detailed breakdown**  
+   - **Interactive chart**  
+7. Adjust inputs — results update automatically.  
 
-Select a CD Option. This choice sets the rate for the CD and the total time period for the comparison.
+---
 
-Configure the T-Bill Strategy, including the reinvestment frequency and any expected change in interest rates for future cycles.
+## 📊 Data & Assumptions  
 
-Review the results in the summary cards, detailed breakdown, and chart. The calculations update automatically as you change the inputs.
+- **Federal Tax Data**  
+  Based on projected **2025 IRS tax brackets** and standard deduction.  
 
-Data & Assumptions
-Federal Tax Data: All calculations are based on the projected 2025 IRS tax brackets and standard deduction amounts.
+- **State Tax Data**  
+  Simplified progressive tax brackets for major states (not covering all state-specific nuances, deductions, or credits).  
 
-State Tax Data: The calculator includes simplified progressive tax brackets for several major states. It does not account for all state-specific nuances, deductions, or credits.
+- **Interest Rates**  
+  Static CD and T-Bill rates based on data from **mid-August 2025** for consistent comparison.  
 
-Interest Rates: The CD and T-Bill rates are pre-loaded based on data from mid-August 2025. These are static values used for consistent calculations.
+- **T-Bill Reinvestment**  
+  Assumes full reinvestment of principal + interest into a new T-Bill of the same duration at maturity.  
 
-T-Bill Reinvestment: The model assumes the user reinvests the entire proceeds (principal + interest) from each T-Bill at maturity into a new T-Bill of the same duration.
+---
 
-Disclaimer
-This calculator provides estimates for educational and planning purposes only. The tax calculations may not reflect your individual situation. It is not financial advice. Always consult a qualified financial advisor or tax professional before making investment decisions.
+## ⚠️ Disclaimer  
+
+This calculator is for **educational and planning purposes only**.  
+- Tax calculations may not reflect your individual situation.  
+- It is **not financial advice**.  
+- Always consult a **qualified financial advisor** or tax professional before making investment decisions.  
+
+---
