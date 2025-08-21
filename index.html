@@ -3,618 +3,530 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Safe Haven Savings Comparator</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <title>CD vs Treasury Bills Professional Comparator</title>
+    <link rel="stylesheet" href="style.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <style>
-        /* Custom styles */
-        body {
-            font-family: 'Inter', sans-serif;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-        }
-
-        /* A simple animation for result cards appearing */
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        #results-container > div, #winner-message, #analysis-details {
-            animation: fadeIn 0.5s ease-out forwards;
-        }
-
-        /* Styling for the winner message */
-        .winner-cd {
-            background-color: #ecfdf5; /* green-50 */
-            color: #065f46; /* green-800 */
-            border: 1px solid #6ee7b7; /* green-300 */
-        }
-
-        .dark .winner-cd {
-            background-color: rgba(16, 185, 129, 0.1);
-            color: #a7f3d0; /* green-200 */
-            border-color: #34d399; /* green-400 */
-        }
-
-        .winner-tbill {
-            background-color: #eff6ff; /* blue-50 */
-            color: #1e40af; /* blue-800 */
-            border: 1px solid #93c5fd; /* blue-300 */
-        }
-
-        .dark .winner-tbill {
-            background-color: rgba(59, 130, 246, 0.1);
-            color: #bfdbfe; /* blue-200 */
-            border-color: #60a5fa; /* blue-400 */
-        }
-
-        .winner-tie {
-            background-color: #fefce8; /* yellow-50 */
-            color: #854d0e; /* yellow-800 */
-            border: 1px solid #fde047; /* yellow-300 */
-        }
-
-        .dark .winner-tie {
-            background-color: rgba(234, 179, 8, 0.1);
-            color: #fef08a; /* yellow-200 */
-            border-color: #facc15; /* yellow-400 */
-        }
-        
-        /* Style for the details/summary accordion */
-        details > summary {
-            cursor: pointer;
-            list-style: none;
-        }
-        details > summary::-webkit-details-marker {
-            display: none;
-        }
-        details[open] .arrow {
-            transform: rotate(90deg);
-        }
-    </style>
 </head>
-<body class="bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 font-sans">
-
-    <!-- Header -->
-    <header class="bg-white dark:bg-gray-800 shadow-sm">
-        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex items-center justify-between h-16">
-                <h1 class="text-2xl font-bold text-indigo-600 dark:text-indigo-400">Safe Haven Savings Comparator</h1>
-                <button id="theme-toggle" class="p-2 rounded-full text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                    <!-- Sun and Moon Icons -->
-                    <svg id="theme-icon-light" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
-                    </svg>
-                    <svg id="theme-icon-dark" class="h-6 w-6 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
-                    </svg>
-                </button>
+<body data-color-scheme="light">
+    <div class="container">
+        <header class="app-header">
+            <div class="header-top">
+                <div class="header-content">
+                    <h1>CD vs Treasury Bills Professional Comparator</h1>
+                    <p class="subtitle">Advanced investment comparison with comprehensive 2025 tax optimization</p>
+                </div>
+                <div class="header-controls">
+                    <button class="btn btn--outline theme-toggle" id="themeToggle" aria-label="Toggle theme">
+                        <span class="theme-icon" id="themeIcon">🌙</span>
+                        <span id="themeText">Dark</span>
+                    </button>
+                </div>
             </div>
-        </div>
-    </header>
+        </header>
 
-    <!-- Main Content -->
-    <main class="container mx-auto p-4 sm:p-6 lg:p-8">
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            
-            <!-- Left Panel: Calculator Form -->
-            <div class="lg:col-span-1">
-                <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md space-y-6">
-                    <h2 class="text-xl font-semibold border-b border-gray-200 dark:border-gray-700 pb-3">Configuration</h2>
-
-                    <!-- Tax Details -->
-                    <fieldset>
-                        <legend class="text-lg font-medium text-indigo-600 dark:text-indigo-400">1. Tax Profile</legend>
-                        <div class="space-y-4 mt-4">
-                            <div>
-                                <label for="gross-income" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Annual Gross Income ($)</label>
-                                <input type="number" id="gross-income" value="80000" class="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm bg-gray-50 dark:bg-gray-700">
-                                <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">Your total income before any deductions.</p>
+        <main class="app-main">
+            <!-- 1. Tax Profile Setup - Fixed 2-Column Layout -->
+            <section class="card tax-profile">
+                <div class="card__header">
+                    <h2>Tax Profile Setup</h2>
+                    <span class="help-text">Calculate your taxable income and marginal tax rates using 2025 tax law</span>
+                </div>
+                <div class="card__body">
+                    <div class="tax-profile-grid">
+                        <div class="tax-profile-row">
+                            <div class="form-group">
+                                <label class="form-label" for="annualIncome">Annual Income ($)</label>
+                                <input type="number" id="annualIncome" class="form-control" placeholder="105000" min="0" step="1000">
                             </div>
-                            <div>
-                                <label for="filing-status" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Filing Status</label>
-                                <select id="filing-status" class="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm bg-gray-50 dark:bg-gray-700">
+                            <div class="form-group">
+                                <label class="form-label" for="preDeductions">Pre-tax Deductions ($)</label>
+                                <input type="number" id="preDeductions" class="form-control" placeholder="24000" min="0" step="500">
+                            </div>
+                        </div>
+                        <div class="tax-profile-row">
+                            <div class="form-group">
+                                <label class="form-label" for="filingStatus">Filing Status</label>
+                                <select id="filingStatus" class="form-control">
                                     <option value="single">Single</option>
-                                    <option value="marriedFilingJointly">Married Filing Jointly</option>
-                                    <option value="marriedFilingSeparately">Married Filing Separately</option>
+                                    <option value="marriedJoint">Married Filing Jointly</option>
+                                    <option value="marriedSeparate">Married Filing Separately</option>
                                     <option value="headOfHousehold">Head of Household</option>
                                 </select>
                             </div>
-                             <div>
-                                <label for="pre-tax-deductions" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Pre-Tax Deductions ($)</label>
-                                <input type="number" id="pre-tax-deductions" value="5000" class="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm bg-gray-50 dark:bg-gray-700">
-                                <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">e.g., 401(k), HSA contributions.</p>
-                            </div>
-                            <div>
-                                <label for="state-tax" class="block text-sm font-medium text-gray-700 dark:text-gray-300">State</label>
-                                <select id="state-tax" class="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm bg-gray-50 dark:bg-gray-700">
-                                     <option value="none">No State Tax</option>
-                                     <option value="CA">California</option>
-                                     <option value="NY">New York</option>
-                                     <option value="MA">Massachusetts</option>
-                                     <option value="NJ">New Jersey</option>
-                                     <option value="IL">Illinois</option>
+                            <div class="form-group">
+                                <label class="form-label" for="state">State</label>
+                                <select id="state" class="form-control">
+                                    <option value="">Select State</option>
                                 </select>
                             </div>
                         </div>
-                    </fieldset>
+                    </div>
+                </div>
+            </section>
 
-                    <!-- Investment Details -->
-                    <fieldset>
-                        <legend class="text-lg font-medium text-indigo-600 dark:text-indigo-400">2. Investment Details</legend>
-                        <div class="space-y-4 mt-4">
-                            <div>
-                                <label for="investment-amount" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Investment Amount ($)</label>
-                                <input type="number" id="investment-amount" value="10000" class="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm bg-gray-50 dark:bg-gray-700">
-                            </div>
-                            <div>
-                                <label for="cd-option" class="block text-sm font-medium text-gray-700 dark:text-gray-300">CD Option (sets comparison period)</label>
-                                <select id="cd-option" class="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm bg-gray-50 dark:bg-gray-700">
-                                    <optgroup label="Marcus by Goldman Sachs" data-bank="marcus">
-                                        <option value="6-4.40">6-Month CD @ 4.40% APY</option>
-                                        <option value="12-4.20" selected>12-Month CD @ 4.20% APY</option>
-                                        <option value="18-4.00">18-Month CD @ 4.00% APY</option>
-                                    </optgroup>
-                                    <optgroup label="Discover Bank" data-bank="discover">
-                                        <option value="6-4.20">6-Month CD @ 4.20% APY</option>
-                                        <option value="12-4.00">12-Month CD @ 4.00% APY</option>
-                                        <option value="18-3.80">18-Month CD @ 3.80% APY</option>
-                                    </optgroup>
-                                    <optgroup label="Capital One" data-bank="capitalone">
-                                        <option value="6-4.20">6-Month CD @ 4.20% APY</option>
-                                        <option value="12-4.00">12-Month CD @ 4.00% APY</option>
-                                        <option value="18-3.80">18-Month CD @ 3.80% APY</option>
-                                    </optgroup>
-                                </select>
-                            </div>
+            <!-- 2. Tax Calculation Summary -->
+            <section class="card tax-summary" id="taxSummary" style="display: none;">
+                <div class="card__header">
+                    <h2>Tax Calculation Summary</h2>
+                    <span class="help-text">Comprehensive 2025 tax calculation with accurate marginal rates</span>
+                </div>
+                <div class="card__body">
+                    <div class="tax-flow">
+                        <div class="tax-flow-step">
+                            <div class="tax-flow-label">Annual Income</div>
+                            <div class="tax-flow-value" id="incomeDisplay">$0</div>
                         </div>
-                    </fieldset>
-
-                    <!-- T-Bill Strategy -->
-                    <fieldset>
-                        <legend class="text-lg font-medium text-indigo-600 dark:text-indigo-400">3. T-Bill Strategy</legend>
-                         <div class="space-y-4 mt-4">
-                            <div>
-                                <label for="tbill-reinvest-freq" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Reinvestment Frequency <span id="tbill-rate-display" class="font-bold text-indigo-600 dark:text-indigo-400"></span></label>
-                                <select id="tbill-reinvest-freq" class="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm bg-gray-50 dark:bg-gray-700">
-                                    <option value="4">4-Week</option>
-                                    <option value="8">8-Week</option>
-                                    <option value="13" selected>13-Week</option>
-                                    <option value="17">17-Week</option>
-                                    <option value="26">26-Week</option>
-                                    <option value="52">52-Week</option>
-                                </select>
-                                <p id="reinvestment-count-display" class="mt-1 text-xs text-gray-500 dark:text-gray-400"></p>
-                            </div>
-                            <div>
-                                <label for="tbill-rate-change" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Expected Rate Change (bps per reinvestment)</label>
-                                <input type="number" id="tbill-rate-change" value="-5" class="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm bg-gray-50 dark:bg-gray-700">
-                                <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">Basis points (100bps = 1%). Use negative for decrease.</p>
-                            </div>
+                        <div class="tax-flow-arrow">−</div>
+                        <div class="tax-flow-step">
+                            <div class="tax-flow-label">Pre-tax Deductions</div>
+                            <div class="tax-flow-value" id="deductionsDisplay">$0</div>
                         </div>
-                    </fieldset>
+                        <div class="tax-flow-arrow">=</div>
+                        <div class="tax-flow-step highlight">
+                            <div class="tax-flow-label">Adjusted Gross Income</div>
+                            <div class="tax-flow-value" id="agiDisplay">$0</div>
+                        </div>
+                        <div class="tax-flow-arrow">−</div>
+                        <div class="tax-flow-step">
+                            <div class="tax-flow-label">Standard Deduction (2025)</div>
+                            <div class="tax-flow-value" id="standardDeductionDisplay">$0</div>
+                        </div>
+                        <div class="tax-flow-arrow">=</div>
+                        <div class="tax-flow-step highlight primary">
+                            <div class="tax-flow-label">Taxable Income</div>
+                            <div class="tax-flow-value" id="taxableIncomeDisplay">$0</div>
+                        </div>
+                    </div>
                     
-                    <!-- Tax Summary -->
-                    <div id="tax-summary" class="p-4 bg-gray-100 dark:bg-gray-700/50 rounded-lg"></div>
-
-
-                    <!-- Actions -->
-                    <div class="flex items-center justify-between pt-4 border-t border-gray-200 dark:border-gray-700">
-                        <button id="calculate-btn" class="w-full bg-indigo-600 text-white font-semibold py-2 px-4 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800">
-                            Compare Investments
-                        </button>
-                        <button id="reset-btn" class="ml-4 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white">
-                            Reset
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Right Panel: Results & Charts -->
-            <div class="lg:col-span-2 space-y-8">
-                <!-- Results Summary -->
-                <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
-                    <h2 class="text-xl font-semibold border-b border-gray-200 dark:border-gray-700 pb-3 mb-4">Comparison Summary</h2>
-                    <div id="results-container" class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <!-- CD Results Card -->
-                        <div id="cd-results-card" class="p-4 border border-gray-200 dark:border-gray-700 rounded-lg"></div>
-                        <!-- T-Bill Results Card -->
-                        <div id="tbill-results-card" class="p-4 border border-gray-200 dark:border-gray-700 rounded-lg"></div>
-                    </div>
-                    <div id="winner-message" class="mt-6 text-center font-semibold text-lg p-3 rounded-md"></div>
-                </div>
-                
-                <!-- Calculation Breakdown -->
-                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md">
-                    <details class="p-6">
-                        <summary class="flex justify-between items-center font-semibold">
-                            Calculation Breakdown
-                            <svg class="w-5 h-5 text-gray-500 transform transition-transform arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                                <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
-                            </svg>
-                        </summary>
-                        <div id="calculation-breakdown-content" class="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
-                            <!-- Content injected by JS -->
+                    <div class="tax-rates-grid">
+                        <div class="tax-rate-item">
+                            <div class="tax-rate-label">Federal Marginal Rate</div>
+                            <div class="tax-rate-value" id="federalMarginalRate">0%</div>
+                            <div class="tax-rate-bracket" id="federalBracketInfo">-</div>
                         </div>
-                    </details>
-                </div>
-                
-                <!-- Enhanced Analysis -->
-                <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
-                    <h2 class="text-xl font-semibold border-b border-gray-200 dark:border-gray-700 pb-3 mb-4">Enhanced Analysis</h2>
-                    <div id="analysis-details">
-                        <!-- Analysis content will be injected here -->
-                    </div>
-                </div>
-
-                <!-- Charts -->
-                <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
-                    <h2 class="text-xl font-semibold border-b border-gray-200 dark:border-gray-700 pb-3 mb-4">Visualizations</h2>
-                     <div class="relative h-80">
-                        <canvas id="returns-chart"></canvas>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Disclaimer -->
-        <div class="mt-8 bg-yellow-50 dark:bg-yellow-900/20 border-l-4 border-yellow-400 dark:border-yellow-500 p-4 rounded-md">
-            <div class="flex">
-                <div class="flex-shrink-0">
-                    <svg class="h-5 w-5 text-yellow-400 dark:text-yellow-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                        <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.21 3.03-1.742 3.03H4.42c-1.532 0-2.492-1.696-1.742-3.03l5.58-9.92zM10 13a1 1 0 110-2 1 1 0 010 2zm-1-8a1 1 0 011-1h.01a1 1 0 010 2H10a1 1 0 01-1-1z" clip-rule="evenodd" />
-                    </svg>
-                </div>
-                <div class="ml-3">
-                    <p class="text-sm text-yellow-700 dark:text-yellow-300">
-                        This calculator provides estimates for educational purposes only. Tax calculations use 2025 federal brackets and simplified state rules. Always consult a qualified financial advisor before making investment decisions.
-                    </p>
-                </div>
-            </div>
-        </div>
-    </main>
-    
-    <footer class="text-center py-4 mt-8 text-sm text-gray-500 dark:text-gray-400">
-        <p>&copy; 2025 Safe Haven Savings Comparator. All Rights Reserved.</p>
-    </footer>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            // --- DOM ELEMENTS ---
-            const grossIncomeEl = document.getElementById('gross-income');
-            const filingStatusEl = document.getElementById('filing-status');
-            const preTaxDeductionsEl = document.getElementById('pre-tax-deductions');
-            const stateTaxEl = document.getElementById('state-tax');
-            const investmentAmountEl = document.getElementById('investment-amount');
-            const cdOptionEl = document.getElementById('cd-option');
-            const tbillReinvestFreqEl = document.getElementById('tbill-reinvest-freq');
-            const tbillRateChangeEl = document.getElementById('tbill-rate-change');
-            const calculateBtn = document.getElementById('calculate-btn');
-            const resetBtn = document.getElementById('reset-btn');
-            const cdResultsCard = document.getElementById('cd-results-card');
-            const tbillResultsCard = document.getElementById('tbill-results-card');
-            const winnerMessageEl = document.getElementById('winner-message');
-            const analysisDetailsEl = document.getElementById('analysis-details');
-            const themeToggle = document.getElementById('theme-toggle');
-            const themeIconLight = document.getElementById('theme-icon-light');
-            const themeIconDark = document.getElementById('theme-icon-dark');
-            const tbillRateDisplay = document.getElementById('tbill-rate-display');
-            const reinvestmentCountDisplay = document.getElementById('reinvestment-count-display');
-            const taxSummaryEl = document.getElementById('tax-summary');
-            const breakdownContentEl = document.getElementById('calculation-breakdown-content');
-
-            // --- CHART INSTANCES ---
-            let returnsChart;
-
-            // --- DATA (Updated August 2025) ---
-            let latestTBillRates = { 
-                        4: 4.35,
-                        8: 4.27,   // Estimate based on surrounding rates
-                        13: 4.23,
-                        17: 4.16,
-                        26: 4.08,
-                        52: 3.92
-                    };
-
-            const standardDeductions2025 = {
-                single: 14600, marriedFilingJointly: 29200,
-                marriedFilingSeparately: 14600, headOfHousehold: 21900
-            };
-            const federalTaxBrackets2025 = {
-                single: [
-                    { rate: 0.10, min: 0, max: 11600 }, { rate: 0.12, min: 11601, max: 47150 },
-                    { rate: 0.22, min: 47151, max: 100525 }, { rate: 0.24, min: 100526, max: 191950 },
-                    { rate: 0.32, min: 191951, max: 243725 }, { rate: 0.35, min: 243726, max: 609350 },
-                    { rate: 0.37, min: 609351, max: Infinity }
-                ],
-                marriedFilingJointly: [
-                    { rate: 0.10, min: 0, max: 23200 }, { rate: 0.12, min: 23201, max: 94300 },
-                    { rate: 0.22, min: 94301, max: 201050 }, { rate: 0.24, min: 201051, max: 383900 },
-                    { rate: 0.32, min: 383901, max: 487450 }, { rate: 0.35, min: 487451, max: 731200 },
-                    { rate: 0.37, min: 731201, max: Infinity }
-                ],
-                marriedFilingSeparately: [
-                    { rate: 0.10, min: 0, max: 11600 }, { rate: 0.12, min: 11601, max: 47150 },
-                    { rate: 0.22, min: 47151, max: 100525 }, { rate: 0.24, min: 100526, max: 191950 },
-                    { rate: 0.32, min: 191951, max: 243725 }, { rate: 0.35, min: 243726, max: 365600 },
-                    { rate: 0.37, min: 365601, max: Infinity }
-                ],
-                headOfHousehold: [
-                    { rate: 0.10, min: 0, max: 16550 }, { rate: 0.12, min: 16551, max: 63100 },
-                    { rate: 0.22, min: 63101, max: 100500 }, { rate: 0.24, min: 100501, max: 191950 },
-                    { rate: 0.32, min: 191951, max: 243700 }, { rate: 0.35, min: 243701, max: 609350 },
-                    { rate: 0.37, min: 609351, max: Infinity }
-                ]
-            };
-            const stateTaxBrackets = {
-                CA: [ { rate: 0.01, min: 0, max: 10412 }, { rate: 0.02, min: 10413, max: 24684 }, { rate: 0.04, min: 24685, max: 38959 }, { rate: 0.06, min: 38960, max: 54081 }, { rate: 0.08, min: 54082, max: 68350 }, { rate: 0.093, min: 68351, max: 349137 }, { rate: 0.103, min: 349138, max: 418961 }, { rate: 0.113, min: 418962, max: 698271 }, { rate: 0.123, min: 698272, max: Infinity } ],
-                NY: [ { rate: 0.04, min: 0, max: 8500 }, { rate: 0.045, min: 8501, max: 11700 }, { rate: 0.0525, min: 11701, max: 13900 }, { rate: 0.0585, min: 13901, max: 80650 }, { rate: 0.0625, min: 80651, max: 215400 }, { rate: 0.0685, min: 215401, max: 1077550 }, { rate: 0.0965, min: 1077551, max: 5000000 }, { rate: 0.103, min: 5000001, max: 25000000 }, { rate: 0.109, min: 25000001, max: Infinity } ],
-                MA: [{ rate: 0.05, min: 0, max: Infinity }],
-                NJ: [ { rate: 0.014, min: 0, max: 20000 }, { rate: 0.0175, min: 20001, max: 35000 }, { rate: 0.035, min: 35001, max: 40000 }, { rate: 0.05525, min: 40001, max: 75000 }, { rate: 0.0637, min: 75001, max: 500000 }, { rate: 0.0897, min: 500001, max: 1000000 }, { rate: 0.1075, min: 1000001, max: Infinity } ],
-                IL: [{ rate: 0.0495, min: 0, max: Infinity }],
-            };
-            
-            // --- HELPER FUNCTIONS ---
-            const formatCurrency = (value) => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(value);
-            const formatPercent = (value) => `${(value * 100).toFixed(3)}%`;
-
-            // --- CALCULATION LOGIC ---
-            const getMarginalTaxRates = (taxableIncome, filingStatus, state) => {
-                const federalBrackets = federalTaxBrackets2025[filingStatus];
-                const stateBrackets = stateTaxBrackets[state];
-                const findRate = (income, brackets) => {
-                    if (!brackets) return 0;
-                    const bracket = brackets.find(b => income >= b.min && income <= b.max);
-                    return bracket ? bracket.rate : 0;
-                };
-                return { federal: findRate(taxableIncome, federalBrackets), state: findRate(taxableIncome, stateBrackets) };
-            };
-
-            const performCalculation = () => {
-                // 1. Get and validate user inputs
-                const grossIncome = parseFloat(grossIncomeEl.value) || 0;
-                const filingStatus = filingStatusEl.value;
-                const preTaxDeductions = parseFloat(preTaxDeductionsEl.value) || 0;
-                const state = stateTaxEl.value;
-                const investmentAmount = parseFloat(investmentAmountEl.value) || 0;
-                const [cdMonthsStr, cdRateStr] = cdOptionEl.value.split('-');
-                const cdMonths = parseFloat(cdMonthsStr) || 0;
-                const cdRate = parseFloat(cdRateStr) || 0;
-                const tbillFreqWeeks = parseInt(tbillReinvestFreqEl.value);
-                const tbillRateChangeBps = parseFloat(tbillRateChangeEl.value) || 0;
-
-                if (investmentAmount <= 0 || cdMonths <= 0) {
-                    winnerMessageEl.textContent = "Please enter a valid investment amount and select a CD option.";
-                    winnerMessageEl.className = 'mt-6 text-center font-semibold text-lg p-3 rounded-md bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-300';
-                    cdResultsCard.innerHTML = ''; tbillResultsCard.innerHTML = '';
-                    if(returnsChart) returnsChart.destroy(); returnsChart = null;
-                    return;
-                }
-
-                // 2. Calculate taxable income and marginal rates
-                const adjustedGrossIncome = Math.max(0, grossIncome - preTaxDeductions);
-                const standardDeduction = standardDeductions2025[filingStatus];
-                const taxableIncome = Math.max(0, adjustedGrossIncome - standardDeduction);
-                const marginalRates = getMarginalTaxRates(taxableIncome, filingStatus, state);
-                
-                // 3. Calculate CD results
-                const cdTermInYears = cdMonths / 12;
-                const cdInterest = investmentAmount * (cdRate / 100) * cdTermInYears;
-                const cdFederalTax = cdInterest * marginalRates.federal;
-                const cdStateTax = cdInterest * marginalRates.state;
-                const cdTotalTax = cdFederalTax + cdStateTax;
-                const cdAfterTaxReturn = cdInterest - cdTotalTax;
-
-                // 4. Calculate T-Bill results
-                const tbillInitialRate = latestTBillRates[tbillFreqWeeks];
-                const weeksInTerm = (cdMonths / 12) * 52;
-                const numReinvestments = Math.floor(weeksInTerm / tbillFreqWeeks);
-                let currentPrincipal = investmentAmount;
-                let totalTbillInterest = 0;
-                const tbillReturnSeries = [{ month: 0, value: 0 }];
-                let cumulativeMonths = 0;
-                let avgTbillRate = 0;
-
-                for (let i = 0; i < numReinvestments; i++) {
-                    const currentRate = tbillInitialRate + (i * tbillRateChangeBps / 100);
-                    avgTbillRate += currentRate;
-                    const termInYears = tbillFreqWeeks / 52;
-                    const interest = currentPrincipal * (currentRate / 100) * termInYears;
-                    totalTbillInterest += interest;
-                    currentPrincipal += interest;
-                    cumulativeMonths += (tbillFreqWeeks / 52) * 12;
-                    const afterTaxInterest = totalTbillInterest * (1 - marginalRates.federal);
-                    tbillReturnSeries.push({ month: Math.min(cdMonths, cumulativeMonths), value: afterTaxInterest });
-                }
-                if (numReinvestments > 0) avgTbillRate /= numReinvestments;
-                else avgTbillRate = tbillInitialRate;
-                
-                const tbillFederalTax = totalTbillInterest * marginalRates.federal;
-                const tbillAfterTaxReturn = totalTbillInterest - tbillFederalTax;
-
-                // 5. Render all UI components
-                const results = {
-                    cd: { interest: cdInterest, federalTax: cdFederalTax, stateTax: cdStateTax, totalTax: cdTotalTax, afterTaxReturn: cdAfterTaxReturn, effectiveTaxRate: cdInterest > 0 ? cdTotalTax / cdInterest : 0 },
-                    tbill: { interest: totalTbillInterest, federalTax: tbillFederalTax, stateTax: 0, totalTax: tbillFederalTax, afterTaxReturn: tbillAfterTaxReturn, effectiveTaxRate: totalTbillInterest > 0 ? tbillFederalTax / totalTbillInterest : 0, initialRate: tbillInitialRate }
-                };
-                renderResults(results);
-                renderTaxSummary(marginalRates);
-                renderBreakdown({ investmentAmount, cdMonths, adjustedGrossIncome, standardDeduction, taxableIncome, marginalRates, cdOptionEl, cdRate, tbillFreqWeeks, numReinvestments, tbillInitialRate, tbillRateChangeBps, avgTbillRate });
-                
-                const cdReturnSeries = [{ month: 0, value: 0 }, { month: cdMonths, value: cdAfterTaxReturn }];
-                renderReturnsChart(cdReturnSeries, tbillReturnSeries, cdMonths);
-                renderAnalysis(cdMonths, numReinvestments, marginalRates, tbillFreqWeeks);
-            };
-
-            // --- UI RENDERING ---
-            const renderResults = (results) => {
-                cdResultsCard.innerHTML = `<h3 class="text-lg font-semibold text-indigo-600 dark:text-indigo-400 mb-2">Certificate of Deposit (CD)</h3><div class="space-y-1 text-sm"><p class="flex justify-between">Pre-Tax Interest: <span>${formatCurrency(results.cd.interest)}</span></p><p class="flex justify-between">Federal Tax: <span class="text-red-500 dark:text-red-400">-${formatCurrency(results.cd.federalTax)}</span></p><p class="flex justify-between">State Tax: <span class="text-red-500 dark:text-red-400">-${formatCurrency(results.cd.stateTax)}</span></p><p class="flex justify-between border-t pt-1 mt-1 border-gray-200 dark:border-gray-600 font-semibold">Total Tax: <span>-${formatCurrency(results.cd.totalTax)}</span></p><p class="flex justify-between font-bold text-base mt-2">After-Tax Return: <span class="text-green-600 dark:text-green-400">${formatCurrency(results.cd.afterTaxReturn)}</span></p><p class="flex justify-between text-xs text-gray-500 dark:text-gray-400">Effective Tax Rate: <span>${formatPercent(results.cd.effectiveTaxRate)}</span></p></div>`;
-                tbillResultsCard.innerHTML = `<h3 class="text-lg font-semibold text-blue-600 dark:text-blue-400 mb-2">Treasury Bill (T-Bill) Ladder</h3><div class="space-y-1 text-sm"><p class="flex justify-between">Initial Investment Rate: <span>${formatPercent(results.tbill.initialRate / 100)}</span></p><p class="flex justify-between">Pre-Tax Interest: <span>${formatCurrency(results.tbill.interest)}</span></p><p class="flex justify-between">Federal Tax: <span class="text-red-500 dark:text-red-400">-${formatCurrency(results.tbill.federalTax)}</span></p><p class="flex justify-between">State Tax: <span class="text-green-600 dark:text-green-400">${formatCurrency(0)} (Exempt)</span></p><p class="flex justify-between border-t pt-1 mt-1 border-gray-200 dark:border-gray-600 font-semibold">Total Tax: <span>-${formatCurrency(results.tbill.totalTax)}</span></p><p class="flex justify-between font-bold text-base mt-2">After-Tax Return: <span class="text-green-600 dark:text-green-400">${formatCurrency(results.tbill.afterTaxReturn)}</span></p><p class="flex justify-between text-xs text-gray-500 dark:text-gray-400">Effective Tax Rate: <span>${formatPercent(results.tbill.effectiveTaxRate)}</span></p></div>`;
-                
-                winnerMessageEl.className = 'mt-6 text-center font-semibold text-lg p-3 rounded-md';
-                if (results.cd.afterTaxReturn > results.tbill.afterTaxReturn) {
-                    winnerMessageEl.textContent = `The CD provides a higher after-tax return by ${formatCurrency(results.cd.afterTaxReturn - results.tbill.afterTaxReturn)}.`;
-                    winnerMessageEl.classList.add('winner-cd');
-                } else if (results.tbill.afterTaxReturn > results.cd.afterTaxReturn) {
-                    winnerMessageEl.textContent = `The T-Bill strategy provides a higher after-tax return by ${formatCurrency(results.tbill.afterTaxReturn - results.cd.afterTaxReturn)}.`;
-                    winnerMessageEl.classList.add('winner-tbill');
-                } else {
-                    winnerMessageEl.textContent = 'Both investment strategies yield the same after-tax return.';
-                    winnerMessageEl.classList.add('winner-tie');
-                }
-            };
-            
-            const renderTaxSummary = (rates) => {
-                const combinedRate = rates.federal + rates.state;
-                taxSummaryEl.innerHTML = `
-                    <h4 class="font-semibold mb-2 text-center text-sm">Marginal Tax Rates</h4>
-                    <div class="space-y-1 text-xs">
-                        <p class="flex justify-between">Federal: <span>${formatPercent(rates.federal)}</span></p>
-                        <p class="flex justify-between">State: <span>${formatPercent(rates.state)}</span></p>
-                        <p class="flex justify-between border-t pt-1 mt-1 border-gray-300 dark:border-gray-600 font-bold">Combined: <span>${formatPercent(combinedRate)}</span></p>
-                    </div>
-                `;
-            };
-
-            const renderBreakdown = (data) => {
-                const selectedCD = data.cdOptionEl.options[data.cdOptionEl.selectedIndex];
-                const cdBank = selectedCD.parentElement.label;
-
-                breakdownContentEl.innerHTML = `
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-4 text-sm">
-                        <div>
-                            <h4 class="font-bold text-base mb-2 text-indigo-600 dark:text-indigo-400">Key Inputs & Tax Details</h4>
-                            <p class="flex justify-between"><strong>Investment Amount:</strong> <span>${formatCurrency(data.investmentAmount)}</span></p>
-                            <p class="flex justify-between"><strong>Comparison Period:</strong> <span>${data.cdMonths} Months</span></p>
-                            <p class="flex justify-between"><strong>Adjusted Gross Income:</strong> <span>${formatCurrency(data.adjustedGrossIncome)}</span></p>
-                            <p class="flex justify-between"><strong>Standard Deduction:</strong> <span>-${formatCurrency(data.standardDeduction)}</span></p>
-                            <p class="flex justify-between font-bold border-t pt-1 mt-1 border-gray-300 dark:border-gray-600"><strong>Taxable Income:</strong> <span>${formatCurrency(data.taxableIncome)}</span></p>
-                            <p class="flex justify-between"><strong>Federal Marginal Rate:</strong> <span>${formatPercent(data.marginalRates.federal)}</span></p>
-                            <p class="flex justify-between"><strong>State Marginal Rate:</strong> <span>${formatPercent(data.marginalRates.state)}</span></p>
+                        <div class="tax-rate-item">
+                            <div class="tax-rate-label">State Marginal Rate</div>
+                            <div class="tax-rate-value" id="stateMarginalRate">0%</div>
+                            <div class="tax-rate-bracket" id="stateBracketInfo">-</div>
                         </div>
-                        <div>
-                            <h4 class="font-bold text-base mb-2 text-indigo-600 dark:text-indigo-400">CD Details</h4>
-                            <p class="flex justify-between"><strong>Bank:</strong> <span>${cdBank}</span></p>
-                            <p class="flex justify-between"><strong>APY:</strong> <span>${data.cdRate.toFixed(2)}%</span></p>
-                        </div>
-                        <div class="sm:col-span-2">
-                            <h4 class="font-bold text-base mb-2 text-blue-600 dark:text-blue-400">T-Bill Details</h4>
-                             <div class="grid grid-cols-2 gap-x-8">
-                                <p class="flex justify-between"><strong>Reinvestment Frequency:</strong> <span>${data.tbillFreqWeeks}-Week</span></p>
-                                <p class="flex justify-between"><strong>Reinvestment Cycles:</strong> <span>${data.numReinvestments}</span></p>
-                                <p class="flex justify-between"><strong>Starting Investment Rate:</strong> <span>${formatPercent(data.tbillInitialRate / 100)}</span></p>
-                                <p class="flex justify-between"><strong>Rate Change per Cycle:</strong> <span>${data.tbillRateChangeBps} bp</span></p>
-                                <p class="flex justify-between"><strong>Average Investment Rate:</strong> <span>${formatPercent(data.avgTbillRate / 100)}</span></p>
-                             </div>
+                        <div class="tax-rate-item highlight">
+                            <div class="tax-rate-label">Combined Marginal Rate</div>
+                            <div class="tax-rate-value" id="totalMarginalRate">0%</div>
+                            <div class="tax-rate-bracket">Applied to investment income</div>
                         </div>
                     </div>
-                `;
-            };
-            
-            const renderAnalysis = (cdMonths, numReinvestments, marginalRates, tbillFreqWeeks) => {
-                analysisDetailsEl.innerHTML = `<div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm"><div><h4 class="font-semibold mb-2">Tax Impact</h4><p>Your calculated marginal federal tax rate is <strong>${formatPercent(marginalRates.federal)}</strong>, and your state rate is <strong>${formatPercent(marginalRates.state)}</strong>. T-Bills' exemption from state and local taxes is a key advantage, especially in high-tax states.</p></div><div><h4 class="font-semibold mb-2">Strategy Overview</h4><p>This comparison models a single ${cdMonths}-month CD against a ladder of <strong>${numReinvestments}</strong> reinvestments of <strong>${tbillFreqWeeks}-week</strong> T-Bills over the same period. The T-Bill strategy is sensitive to changes in interest rates.</p></div><div><h4 class="font-semibold mb-2">Risk Profile</h4><p><strong>CDs:</strong> Insured by the FDIC up to $250,000 per depositor, per insured bank.</p><p class="mt-2"><strong>T-Bills:</strong> Backed by the full faith and credit of the U.S. government, considered one of the safest investments in the world.</p></div><div><h4 class="font-semibold mb-2">Liquidity</h4><p><strong>CDs:</strong> Generally have penalties for early withdrawal, making them less liquid.</p><p class="mt-2"><strong>T-Bills:</strong> Can be sold on the secondary market before maturity, offering more liquidity.</p></div></div>`;
-            };
+                </div>
+            </section>
 
-            const renderReturnsChart = (cdData, tbillData, totalMonths) => {
-                const ctx = document.getElementById('returns-chart').getContext('2d');
-                const labels = Array.from({ length: totalMonths + 1 }, (_, i) => `M${i}`);
-                const fullCdData = labels.map((_, i) => (cdData[1].value / totalMonths) * i);
-                
-                const fullTbillData = [];
-                for (let i = 0; i <= totalMonths; i++) {
-                    const nextPoint = tbillData.find(p => p.month >= i) || tbillData[tbillData.length - 1];
-                    const prevPoint = [...tbillData].reverse().find(p => p.month <= i) || { month: 0, value: 0 };
-                    if (!nextPoint || !prevPoint || nextPoint.month === prevPoint.month || nextPoint.month - prevPoint.month === 0) {
-                         fullTbillData.push(nextPoint ? nextPoint.value : 0);
-                    } else {
-                        const slope = (nextPoint.value - prevPoint.value) / (nextPoint.month - prevPoint.month);
-                        fullTbillData.push(prevPoint.value + slope * (i - prevPoint.month));
-                    }
-                }
-                
-                const data = { labels, datasets: [ { label: 'CD After-Tax Return', data: fullCdData, borderColor: 'rgba(79, 70, 229, 1)', backgroundColor: 'rgba(79, 70, 229, 0.2)', fill: true, tension: 0.1 }, { label: 'T-Bill After-Tax Return', data: fullTbillData, borderColor: 'rgba(37, 99, 235, 1)', backgroundColor: 'rgba(37, 99, 235, 0.2)', fill: true, tension: 0.1 } ] };
-                if (returnsChart) { returnsChart.data = data; returnsChart.options = chartOptions('After-Tax Returns Over Time'); returnsChart.update(); } 
-                else { returnsChart = new Chart(ctx, { type: 'line', data, options: chartOptions('After-Tax Returns Over Time') }); }
-            };
-            
-            const chartOptions = (chartTitle) => {
-                const isDarkMode = document.documentElement.classList.contains('dark');
-                const gridColor = isDarkMode ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)';
-                const textColor = isDarkMode ? '#f9fafb' : '#111827';
-                return { 
-                    responsive: true, 
-                    maintainAspectRatio: false, 
-                    scales: { 
-                        y: { beginAtZero: true, ticks: { color: textColor }, grid: { color: gridColor } }, 
-                        x: { ticks: { color: textColor }, grid: { color: gridColor } } 
-                    }, 
-                    plugins: { 
-                        title: { display: true, text: chartTitle, color: textColor, font: { size: 16, weight: '600' }, padding: { bottom: 10 } },
-                        legend: { position: 'bottom', labels: { color: textColor, boxWidth: 12, padding: 20 } }, 
-                        tooltip: { enabled: true, mode: 'index', intersect: false, } 
-                    }, 
-                    interaction: { mode: 'nearest', axis: 'x', intersect: false } 
-                };
-            };
+            <!-- 3. Investment Configuration - Improved Spacing -->
+            <section class="card investment-config">
+                <div class="card__header">
+                    <h2>Investment Configuration</h2>
+                    <span class="help-text">Configure your investment amount and compare CD vs T-Bill options</span>
+                </div>
+                <div class="card__body investment-config-body">
+                    <!-- Investment Amount -->
+                    <div class="config-section amount-section">
+                        <h3>Investment Amount</h3>
+                        <div class="amount-options">
+                            <button class="btn btn--outline amount-btn" data-amount="10000">$10,000</button>
+                            <button class="btn btn--outline amount-btn" data-amount="25000">$25,000</button>
+                            <button class="btn btn--outline amount-btn" data-amount="50000">$50,000</button>
+                            <button class="btn btn--outline amount-btn" data-amount="100000">$100,000</button>
+                            <button class="btn btn--outline amount-btn" data-amount="250000">$250,000</button>
+                        </div>
+                        <div class="form-group custom-amount">
+                            <label class="form-label" for="customAmount">Custom Amount ($)</label>
+                            <input type="number" id="customAmount" class="form-control" placeholder="Enter amount" min="1000" step="1000">
+                        </div>
+                    </div>
 
-            const updateDynamicLabels = () => {
-                const tbillFreqWeeks = parseInt(tbillReinvestFreqEl.value);
-                const [cdMonthsStr] = cdOptionEl.value.split('-');
-                const cdMonths = parseFloat(cdMonthsStr);
-                
-                const currentRate = latestTBillRates[tbillFreqWeeks];
-                tbillRateDisplay.textContent = `(${formatPercent(currentRate/100)})`;
+                    <!-- CD and T-Bill Configuration -->
+                    <div class="config-grid">
+                        <!-- CD Configuration -->
+                        <div class="config-section cd-config">
+                            <h3>💰 Certificate of Deposit</h3>
+                            <span class="config-help">FDIC insured up to $250,000</span>
+                            <div class="form-grid-compact">
+                                <div class="form-group">
+                                    <label class="form-label" for="cdBank">Bank</label>
+                                    <select id="cdBank" class="form-control">
+                                        <option value="">Select Bank</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label" for="cdTerm">Term</label>
+                                    <select id="cdTerm" class="form-control">
+                                        <option value="">Select Term</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label" for="compoundingFrequency">Compounding</label>
+                                    <select id="compoundingFrequency" class="form-control">
+                                        <option value="365">Daily</option>
+                                        <option value="12" selected>Monthly</option>
+                                        <option value="4">Quarterly</option>
+                                        <option value="1">Annual</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Current Rate (APY)</label>
+                                    <div class="rate-display" id="cdRateDisplay">Select options</div>
+                                </div>
+                            </div>
+                        </div>
 
-                if (cdMonths > 0) {
-                    const weeksInTerm = (cdMonths / 12) * 52;
-                    const numReinvestments = Math.floor(weeksInTerm / tbillFreqWeeks);
-                    reinvestmentCountDisplay.textContent = `Invested ${numReinvestments} time(s) to match CD duration.`;
-                } else {
-                    reinvestmentCountDisplay.textContent = '';
-                }
-            };
+                        <!-- T-Bill Configuration -->
+                        <div class="config-section tbill-config">
+                            <h3>🏛️ Treasury Bills</h3>
+                            <span class="config-help">Government backed, state tax exempt</span>
+                            <div class="form-grid-compact">
+                                <div class="form-group">
+                                    <label class="form-label" for="tbillStrategy">Strategy</label>
+                                    <select id="tbillStrategy" class="form-control">
+                                        <option value="single">Single Purchase</option>
+                                        <option value="ladder">Ladder Strategy</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label" for="tbillTerm">T-Bill Term</label>
+                                    <select id="tbillTerm" class="form-control">
+                                        <option value="4week">4-Week (4.21%)</option>
+                                        <option value="13week" selected>13-Week (4.14%)</option>
+                                        <option value="26week">26-Week (4.07%)</option>
+                                        <option value="52week">52-Week (3.88%)</option>
+                                    </select>
+                                </div>
+                                <div class="form-group duration-match" id="durationMatchInfo">
+                                    <label class="form-label">Duration Matching</label>
+                                    <div class="duration-match-display" id="durationMatchDisplay">Select CD term first</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
 
-            // --- THEME SWITCHER ---
-            const applyTheme = (theme) => {
-                if (theme === 'dark') { document.documentElement.classList.add('dark'); themeIconLight.classList.add('hidden'); themeIconDark.classList.remove('hidden'); } 
-                else { document.documentElement.classList.remove('dark'); themeIconLight.classList.remove('hidden'); themeIconDark.classList.add('hidden'); }
-                if(returnsChart) { returnsChart.options = chartOptions('After-Tax Returns Over Time'); returnsChart.update(); }
-            };
+            <!-- 4. Investment Comparison Results -->
+            <section class="card results-section" id="results">
+                <div class="card__header">
+                    <div class="results-header">
+                        <h2>Investment Comparison Results</h2>
+                        <button class="btn btn--primary" id="printAnalysisBtn">🖨️ Print Analysis Report</button>
+                    </div>
+                </div>
+                <div class="card__body">
+                    <div class="comparison-grid">
+                        <div class="comparison-item cd-results">
+                            <h3>💰 Certificate of Deposit</h3>
+                            <div class="result-details">
+                                <div class="result-row">
+                                    <span>Bank:</span>
+                                    <span id="result-cd-bank">-</span>
+                                </div>
+                                <div class="result-row">
+                                    <span>Rate (APY):</span>
+                                    <span id="result-cd-rate">-</span>
+                                </div>
+                                <div class="result-row">
+                                    <span>Term:</span>
+                                    <span id="result-cd-term">-</span>
+                                </div>
+                                <div class="result-row">
+                                    <span>Compounding:</span>
+                                    <span id="result-cd-compounding">-</span>
+                                </div>
+                                <div class="result-row">
+                                    <span>Gross Return:</span>
+                                    <span id="result-cd-gross">-</span>
+                                </div>
+                                <div class="result-row">
+                                    <span>Federal Tax:</span>
+                                    <span id="result-cd-fed-tax">-</span>
+                                </div>
+                                <div class="result-row">
+                                    <span>State Tax:</span>
+                                    <span id="result-cd-state-tax">-</span>
+                                </div>
+                                <div class="result-row highlight">
+                                    <span>After-Tax Return:</span>
+                                    <span id="result-cd-net">-</span>
+                                </div>
+                                <div class="result-row">
+                                    <span>Effective Rate:</span>
+                                    <span id="result-cd-effective">-</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="comparison-item tbill-results">
+                            <h3>🏛️ Treasury Bills</h3>
+                            <div class="result-details">
+                                <div class="result-row">
+                                    <span>Strategy:</span>
+                                    <span id="result-tbill-strategy">-</span>
+                                </div>
+                                <div class="result-row">
+                                    <span>Term:</span>
+                                    <span id="result-tbill-term">-</span>
+                                </div>
+                                <div class="result-row">
+                                    <span>Rate:</span>
+                                    <span id="result-tbill-rate">-</span>
+                                </div>
+                                <div class="result-row">
+                                    <span>Duration Match:</span>
+                                    <span id="result-tbill-duration">-</span>
+                                </div>
+                                <div class="result-row">
+                                    <span>Gross Return:</span>
+                                    <span id="result-tbill-gross">-</span>
+                                </div>
+                                <div class="result-row">
+                                    <span>Federal Tax:</span>
+                                    <span id="result-tbill-fed-tax">-</span>
+                                </div>
+                                <div class="result-row">
+                                    <span>State Tax:</span>
+                                    <span class="tax-exempt">$0 (Exempt)</span>
+                                </div>
+                                <div class="result-row highlight">
+                                    <span>After-Tax Return:</span>
+                                    <span id="result-tbill-net">-</span>
+                                </div>
+                                <div class="result-row">
+                                    <span>Effective Rate:</span>
+                                    <span id="result-tbill-effective">-</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
-            themeToggle.addEventListener('click', () => {
-                const newTheme = document.documentElement.classList.contains('dark') ? 'light' : 'dark';
-                localStorage.setItem('theme', newTheme);
-                applyTheme(newTheme);
-            });
-            
-            // --- EVENT LISTENERS ---
-            [grossIncomeEl, filingStatusEl, preTaxDeductionsEl, stateTaxEl, cdOptionEl, tbillReinvestFreqEl, tbillRateChangeEl, investmentAmountEl].forEach(el => {
-                el.addEventListener('change', () => {
-                    performCalculation();
-                    updateDynamicLabels();
-                });
-            });
-            
-            calculateBtn.addEventListener('click', performCalculation);
-            resetBtn.addEventListener('click', () => {
-                grossIncomeEl.value = "80000"; filingStatusEl.value = "single"; preTaxDeductionsEl.value = "5000";
-                stateTaxEl.value = "none"; investmentAmountEl.value = "10000"; cdOptionEl.value = "12-4.20";
-                tbillReinvestFreqEl.value = "13"; tbillRateChangeEl.value = "-5";
-                performCalculation();
-                updateDynamicLabels();
-            });
+                    <div class="recommendation" id="recommendation">
+                        <h3>💡 Professional Investment Recommendation</h3>
+                        <p id="recommendation-text">Enter your tax profile and investment details above to receive a personalized recommendation.</p>
+                    </div>
 
-            // --- INITIALIZATION ---
-            const preferredTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-            applyTheme(preferredTheme);
-            performCalculation();
-            updateDynamicLabels();
-        });
-    </script>
+                    <!-- Returns Comparison Analysis Chart -->
+                    <div class="chart-section">
+                        <h3>📊 Returns Comparison Analysis</h3>
+                        <div class="chart-container" style="position: relative; height: 400px;">
+                            <canvas id="comparisonChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 5. Enhanced Tax Analysis -->
+            <section class="card enhanced-analysis" id="enhancedAnalysis">
+                <div class="card__header">
+                    <div class="enhanced-analysis-header">
+                        <h2>Enhanced Tax Analysis</h2>
+                        <button class="btn btn--outline btn--sm" id="toggleEnhancedAnalysis">Show Details</button>
+                    </div>
+                </div>
+                <div class="card__body enhanced-analysis-content" id="enhancedAnalysisContent" style="display: none;">
+                    <div class="analysis-section compact">
+                        <div class="compact-analysis-grid">
+                            <div class="compact-item">
+                                <h4>Tax Application</h4>
+                                <div class="compact-detail" id="taxApplicationDetail">2025 tax brackets applied to taxable income</div>
+                            </div>
+                            <div class="compact-item">
+                                <h4>Marginal Rates</h4>
+                                <div class="compact-detail" id="marginalRatesDetail">Federal and state rates combined</div>
+                            </div>
+                            <div class="compact-item">
+                                <h4>Tax Advantage</h4>
+                                <div class="compact-detail" id="taxAdvantageDetail">T-Bills save on state taxes</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="analysis-section">
+                        <h3>Detailed Investment Tax Impact</h3>
+                        <div class="calculation-tables">
+                            <div class="calculation-table">
+                                <h4>CD Tax Calculation</h4>
+                                <table class="calculation-breakdown" id="cdCalculationTable">
+                                    <thead>
+                                        <tr>
+                                            <th>Component</th>
+                                            <th>Formula</th>
+                                            <th>Value</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="cdCalculationTableBody">
+                                        <tr><td>Interest Income</td><td>Amount × Rate × Term</td><td id="cd-calc-interest">-</td></tr>
+                                        <tr><td>Federal Tax</td><td>Interest × Federal Rate</td><td id="cd-calc-fed">-</td></tr>
+                                        <tr><td>State Tax</td><td>Interest × State Rate</td><td id="cd-calc-state">-</td></tr>
+                                        <tr><td>Total Tax</td><td>Federal + State</td><td id="cd-calc-total-tax">-</td></tr>
+                                        <tr><td>After-Tax Return</td><td>Interest - Total Tax</td><td id="cd-calc-net">-</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            
+                            <div class="calculation-table">
+                                <h4>T-Bill Tax Calculation</h4>
+                                <table class="calculation-breakdown" id="tbillCalculationTable">
+                                    <thead>
+                                        <tr>
+                                            <th>Component</th>
+                                            <th>Formula</th>
+                                            <th>Value</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tbillCalculationTableBody">
+                                        <tr><td>Interest Income</td><td>Amount × Rate × Strategy</td><td id="tbill-calc-interest">-</td></tr>
+                                        <tr><td>Federal Tax</td><td>Interest × Federal Rate</td><td id="tbill-calc-fed">-</td></tr>
+                                        <tr><td>State Tax</td><td>$0 (Exempt)</td><td id="tbill-calc-state">$0</td></tr>
+                                        <tr><td>Total Tax</td><td>Federal Only</td><td id="tbill-calc-total-tax">-</td></tr>
+                                        <tr><td>After-Tax Return</td><td>Interest - Federal Tax</td><td id="tbill-calc-net">-</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 6. Historical Rate Trends (T-Bills Only) -->
+            <section class="card historical-trends" id="historicalTrends">
+                <div class="card__header">
+                    <h2>📈 Treasury Bills Historical Rate Trends</h2>
+                    <span class="help-text">Last 6 months T-Bill rate trends across all major terms</span>
+                </div>
+                <div class="card__body">
+                    <div class="chart-section">
+                        <div class="chart-container" style="position: relative; height: 400px;">
+                            <canvas id="historicalChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 7. Alternative Savings Options - 2 Column Layout -->
+            <section class="card alternative-options" id="alternativeOptions">
+                <div class="card__header">
+                    <h2>🚀 Alternative Savings Options to Explore</h2>
+                    <span class="help-text">Additional high-yield investment opportunities worth considering</span>
+                </div>
+                <div class="card__body">
+                    <div class="alternatives-grid-two-column">
+                        <div class="alternative-item">
+                            <div class="alternative-header">
+                                <h4>🏦 Brokered CDs</h4>
+                                <div class="current-rate">4.5-5.2%</div>
+                            </div>
+                            <p class="alternative-description">CDs purchased through brokerage accounts from various banks</p>
+                            <div class="pros-cons">
+                                <div class="pros">
+                                    <h5>✅ Pros:</h5>
+                                    <ul>
+                                        <li>Higher rates than direct bank CDs</li>
+                                        <li>Secondary market liquidity</li>
+                                        <li>FDIC insured</li>
+                                        <li>No early withdrawal penalties if sold</li>
+                                    </ul>
+                                </div>
+                                <div class="cons">
+                                    <h5>❌ Cons:</h5>
+                                    <ul>
+                                        <li>May sell at loss if rates rise</li>
+                                        <li>Brokerage account required</li>
+                                        <li>Less predictable than bank CDs</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="alternative-item">
+                            <div class="alternative-header">
+                                <h4>🏛️ Municipal Bonds</h4>
+                                <div class="current-rate">3.0-4.5%</div>
+                            </div>
+                            <p class="alternative-description">Bonds issued by state and local governments</p>
+                            <div class="pros-cons">
+                                <div class="pros">
+                                    <h5>✅ Pros:</h5>
+                                    <ul>
+                                        <li>Federal tax-free income</li>
+                                        <li>Often state tax-free in issuing state</li>
+                                        <li>Good for high-bracket taxpayers</li>
+                                        <li>Variety of maturities</li>
+                                    </ul>
+                                </div>
+                                <div class="cons">
+                                    <h5>❌ Cons:</h5>
+                                    <ul>
+                                        <li>Credit risk varies by issuer</li>
+                                        <li>Interest rate risk</li>
+                                        <li>May have call provisions</li>
+                                        <li>Minimum investments often $5,000+</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="alternative-item">
+                            <div class="alternative-header">
+                                <h4>💰 High-Yield Savings</h4>
+                                <div class="current-rate">4.0-4.5%</div>
+                            </div>
+                            <p class="alternative-description">Online savings accounts with competitive rates</p>
+                            <div class="pros-cons">
+                                <div class="pros">
+                                    <h5>✅ Pros:</h5>
+                                    <ul>
+                                        <li>Full liquidity</li>
+                                        <li>FDIC insured</li>
+                                        <li>No minimum balance</li>
+                                        <li>Easy online access</li>
+                                    </ul>
+                                </div>
+                                <div class="cons">
+                                    <h5>❌ Cons:</h5>
+                                    <ul>
+                                        <li>Variable rates can change</li>
+                                        <li>Limited physical branches</li>
+                                        <li>May have transfer limits</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="alternative-item">
+                            <div class="alternative-header">
+                                <h4>📈 Money Market Accounts</h4>
+                                <div class="current-rate">3.8-4.3%</div>
+                            </div>
+                            <p class="alternative-description">Deposit accounts with check-writing and higher yields</p>
+                            <div class="pros-cons">
+                                <div class="pros">
+                                    <h5>✅ Pros:</h5>
+                                    <ul>
+                                        <li>Higher rates than regular savings</li>
+                                        <li>Check writing ability</li>
+                                        <li>FDIC insured</li>
+                                        <li>Some ATM access</li>
+                                    </ul>
+                                </div>
+                                <div class="cons">
+                                    <h5>❌ Cons:</h5>
+                                    <ul>
+                                        <li>Higher minimum balances</li>
+                                        <li>Limited transactions</li>
+                                        <li>Rates can be tiered</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="app.js"></script>
 </body>
 </html>
-
