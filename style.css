@@ -778,6 +778,16 @@ select.form-control:hover {
   border-bottom: 1px solid var(--color-card-border);
 }
 
+.investment-config .card__header h2 .rates-update-info {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-normal);
+  color: var(--color-text-secondary);
+  margin-left: var(--space-12);
+  font-style: italic;
+  vertical-align: middle;
+  letter-spacing: normal;
+}
+
 .config-help {
   color: var(--color-text-secondary);
   font-size: var(--font-size-sm);
@@ -1439,6 +1449,45 @@ select.form-control:hover {
 
 @keyframes pulse {
   50% { transform: scale(1.02); }
+}
+
+/* Professional Footer */
+.app-footer {
+  text-align: center;
+  padding: var(--space-32) var(--space-16);
+  margin-top: var(--space-32);
+  border-top: 1px solid var(--color-border);
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+}
+
+.app-footer p {
+  margin-bottom: var(--space-8); /* A smaller bottom margin for footer paragraphs */
+}
+
+.app-footer p:last-child {
+  margin-bottom: 0;
+}
+
+.app-footer a {
+  font-weight: var(--font-weight-medium);
+  color: var(--color-primary);
+}
+
+.app-footer a:hover {
+  text-decoration: underline;
+}
+
+.app-footer a.disabled-link {
+  color: var(--color-neutral-400);
+  pointer-events: none; /* Makes the link unclickable */
+  cursor: default;
+  text-decoration: none;
+}
+
+.footer-disclaimer {
+  margin-top: var(--space-12); /* Add some space above the disclaimer */
+  font-style: italic;
 }
 
 /* Responsive Design */

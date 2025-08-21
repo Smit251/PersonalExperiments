@@ -1,5 +1,6 @@
 // Application data with accurate 2025 tax brackets and current rates
 const appData = {
+  ratesLastUpdated: "Aug 21, 2025",
   taxData2025: {
     standardDeductions: {
       single: 15750,
@@ -46,17 +47,17 @@ const appData = {
   },
   currentRates: {
     cds: {
-      marcus: {"3mo": 4.15, "6mo": 4.30, "12mo": 4.20, "18mo": 4.15, "24mo": 4.10},
-      ally: {"3mo": 4.00, "6mo": 4.25, "12mo": 4.20, "18mo": 4.15, "24mo": 4.15},
-      discover: {"3mo": 4.10, "6mo": 4.25, "12mo": 4.15, "18mo": 4.10, "24mo": 4.05},
-      capitalone: {"6mo": 4.20, "12mo": 4.10, "18mo": 4.05, "24mo": 4.00},
-      synchrony: {"3mo": 4.10, "6mo": 4.30, "12mo": 4.25, "18mo": 4.20, "24mo": 4.20}
+      marcus: {"6mo": 4.40, "12mo": 4.20, "18mo": 4.00, "24mo": 3.95},
+      ally: {"3mo": 2.90, "6mo": 3.90, "12mo": 3.85, "18mo": 3.70},
+      discover: {"3mo": 4.20, "6mo": 3.50, "12mo": 3.80, "18mo": 3.80, "24mo": 3.60},
+      capitalone: {"6mo": 4.20, "12mo": 4.00, "18mo": 3.80, "24mo": 3.80},
+      synchrony: {"6mo": 3.70, "12mo": 4.00, "18mo": 3.80, "24mo": 3.50}
     },
     tbills: {
-      "4week": 4.21,
-      "13week": 4.14,
-      "26week": 4.07,
-      "52week": 3.88
+      "4week": 4.354,
+      "13week": 4.232,
+      "26week": 4.081,
+      "52week": 3.924
     }
   },
   stateTaxData: {
@@ -176,6 +177,7 @@ function initializeApplication() {
     // Initialize dropdowns
     initializeStateDropdown();
     initializeCdBankDropdown();
+    initializeTbillTermOptions();
     
     // Attach all event listeners
     attachEventListeners();
@@ -185,6 +187,7 @@ function initializeApplication() {
     setupPrintAnalysis();
     setupEnhancedAnalysis();
     initializeScenarioLogging();
+    initializeRatesUpdateInfo();
     
     // Show additional sections immediately for better UX
     showAdditionalSections();
@@ -240,6 +243,16 @@ function updateThemeUI() {
       themeIcon.textContent = '☀️';
       themeText.textContent = 'Light';
     }
+  }
+}
+
+function initializeRatesUpdateInfo() {
+  const infoEl = document.getElementById('ratesUpdateInfo');
+  if (infoEl && appData.ratesLastUpdated) {
+    infoEl.textContent = `(Rates as of ${appData.ratesLastUpdated})`;
+    console.log('Rates update info initialized.');
+  } else {
+    console.warn('Rates update info element not found.');
   }
 }
 
@@ -538,6 +551,26 @@ function initializeCdBankDropdown() {
   });
   
   return true;
+}
+
+function initializeTbillTermOptions() {
+    const tbillTermSelect = document.getElementById('tbillTerm');
+    if (!tbillTermSelect) return;
+
+    tbillTermSelect.innerHTML = ''; // Clear existing options
+
+    Object.entries(appData.currentRates.tbills).forEach(([term, rate]) => {
+        const option = document.createElement('option');
+        option.value = term;
+        // e.g., "4-Week (4.35%)"
+        option.textContent = `${term.replace('week', '-Week')} (${rate.toFixed(2)}%)`;
+        tbillTermSelect.appendChild(option);
+    });
+
+    // Set a default selection
+    tbillTermSelect.value = '13week';
+    appState.tbillTerm = '13week';
+    console.log('T-Bill term options initialized dynamically.');
 }
 
 function attachEventListeners() {

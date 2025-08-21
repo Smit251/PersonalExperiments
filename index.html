@@ -121,7 +121,7 @@
             <!-- 3. Investment Configuration - Improved Spacing -->
             <section class="card investment-config">
                 <div class="card__header">
-                    <h2>Investment Configuration</h2>
+                    <h2>Investment Configuration <span class="rates-update-info" id="ratesUpdateInfo"></span></h2>
                     <span class="help-text">Configure your investment amount and compare CD vs T-Bill options</span>
                 </div>
                 <div class="card__body investment-config-body">
@@ -191,10 +191,7 @@
                                 <div class="form-group">
                                     <label class="form-label" for="tbillTerm">T-Bill Term</label>
                                     <select id="tbillTerm" class="form-control">
-                                        <option value="4week">4-Week (4.21%)</option>
-                                        <option value="13week" selected>13-Week (4.14%)</option>
-                                        <option value="26week">26-Week (4.07%)</option>
-                                        <option value="52week">52-Week (3.88%)</option>
+                                        <!-- Options will be populated by JavaScript -->
                                     </select>
                                 </div>
                                 <div class="form-group duration-match" id="durationMatchInfo">
@@ -532,6 +529,15 @@
                 </div>
             </section>
         </main>
+        
+        <footer class="app-footer">
+            <p>&copy; 2025 Professional Calculator. All Rights Reserved.</p>
+            <p>
+                <a href="#" class="disabled-link" title="Coming Soon">Privacy Policy</a> | 
+                <a href="#" class="disabled-link" title="Coming Soon">Terms of Service</a>
+            </p>
+            <p class="footer-disclaimer">This analysis is for informational purposes only and does not constitute financial advice. Consult a qualified professional before making investment decisions.</p>
+        </footer>
     </div>
 
     <!-- Firebase SDKs (add these before your app.js script) -->
