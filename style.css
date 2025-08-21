@@ -1409,6 +1409,38 @@ select.form-control:hover {
   border-color: var(--color-neutral-400);
 }
 
+/* Action Card for Compare Button */
+.action-card {
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  padding: 0;
+  margin-bottom: var(--space-32);
+}
+
+#compareBtn {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+  padding: var(--space-16) var(--space-24);
+  background: var(--gradient-success);
+  box-shadow: var(--shadow-professional-lg);
+  transition: all var(--duration-normal) var(--ease-standard);
+}
+
+#compareBtn:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-professional-xl);
+}
+
+#compareBtn.stale {
+  background: var(--gradient-warning);
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  50% { transform: scale(1.02); }
+}
+
 /* Responsive Design */
 @media (max-width: 1024px) {
   .config-grid {

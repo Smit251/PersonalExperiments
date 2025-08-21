@@ -207,8 +207,15 @@
                 </div>
             </section>
 
+            <!-- Action Card: Compare Button -->
+            <section class="card action-card">
+                <button class="btn btn--primary btn--lg btn--full-width" id="compareBtn">
+                    📊 Compare Investments
+                </button>
+            </section>
+
             <!-- 4. Investment Comparison Results -->
-            <section class="card results-section" id="results">
+            <section class="card results-section hidden" id="results">
                 <div class="card__header">
                     <div class="results-header">
                         <h2>Investment Comparison Results</h2>
@@ -318,7 +325,7 @@
             </section>
 
             <!-- 5. Enhanced Tax Analysis -->
-            <section class="card enhanced-analysis" id="enhancedAnalysis">
+            <section class="card enhanced-analysis hidden" id="enhancedAnalysis">
                 <div class="card__header">
                     <div class="enhanced-analysis-header">
                         <h2>Enhanced Tax Analysis</h2>
@@ -526,6 +533,10 @@
             </section>
         </main>
     </div>
+
+    <!-- Firebase SDKs (add these before your app.js script) -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
 
     <script src="app.js"></script>
 </body>

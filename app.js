@@ -184,6 +184,7 @@ function initializeApplication() {
     setupThemeToggle();
     setupPrintAnalysis();
     setupEnhancedAnalysis();
+    initializeScenarioLogging();
     
     // Show additional sections immediately for better UX
     showAdditionalSections();
@@ -239,6 +240,34 @@ function updateThemeUI() {
       themeIcon.textContent = '☀️';
       themeText.textContent = 'Light';
     }
+  }
+}
+
+
+function initializeScenarioLogging() {
+  // Your web app's Firebase configuration, corrected for Realtime Database
+  const firebaseConfig = {
+    apiKey: "AIzaSyAJaFIl1FNUijUUAoDkIZiQjl8iaHE7LmU",
+    authDomain: "investment-calculator-logger.firebaseapp.com",
+    databaseURL: "https://investment-calculator-logger-default-rtdb.firebaseio.com",
+    projectId: "investment-calculator-logger",
+    storageBucket: "investment-calculator-logger.appspot.com",
+    messagingSenderId: "227414383899",
+    appId: "1:227414383899:web:0ec9232fe91d72999307be",
+    measurementId: "G-WE3R3CPC5Y"
+  };
+
+  // Initialize Firebase using the global 'firebase' object from the SDK script
+  try {
+    // Check if firebase is loaded and not already initialized
+    if (typeof firebase !== 'undefined' && !firebase.apps.length) {
+      firebase.initializeApp(firebaseConfig);
+      console.log('Firebase scenario logging initialized.');
+    } else if (typeof firebase === 'undefined') {
+      console.warn('Firebase SDK not loaded. Scenarios will not be saved.');
+    }
+  } catch (error) {
+    console.error("Error initializing Firebase:", error);
   }
 }
 
@@ -543,13 +572,20 @@ function attachEventListeners() {
       customAmountEl.addEventListener('input', handleCustomAmount);
     }
 
+    // Compare button
+    const compareBtn = document.getElementById('compareBtn');
+    if (compareBtn) {
+      compareBtn.addEventListener('click', calculateComparison);
+      console.log('Compare button listener attached');
+    }
+
     // CD options
     const cdBankEl = document.getElementById('cdBank');
     if (cdBankEl) {
       cdBankEl.addEventListener('change', function(e) {
         appState.cdBank = e.target.value;
         updateCdTermOptions();
-        calculateComparison();
+        markComparisonAsStale();
       });
     }
     
@@ -559,7 +595,7 @@ function attachEventListeners() {
         appState.cdTerm = e.target.value;
         updateCdRateDisplay();
         updateDurationMatching();
-        calculateComparison();
+        markComparisonAsStale();
       });
     }
     
@@ -567,7 +603,7 @@ function attachEventListeners() {
     if (compoundingFrequencyEl) {
       compoundingFrequencyEl.addEventListener('change', function(e) {
         appState.compoundingFrequency = parseInt(e.target.value);
-        calculateComparison();
+        markComparisonAsStale();
       });
     }
 
@@ -577,7 +613,7 @@ function attachEventListeners() {
       tbillStrategyEl.addEventListener('change', function(e) {
         appState.tbillStrategy = e.target.value;
         updateDurationMatching();
-        calculateComparison();
+        markComparisonAsStale();
       });
     }
     
@@ -586,7 +622,7 @@ function attachEventListeners() {
       tbillTermEl.addEventListener('change', function(e) {
         appState.tbillTerm = e.target.value;
         updateDurationMatching();
-        calculateComparison();
+        markComparisonAsStale();
       });
     }
     
@@ -635,7 +671,7 @@ function handleTaxInputChange(event) {
   }
   
   calculateTaxProfile();
-  calculateComparison();
+  markComparisonAsStale();
 }
 
 function calculateTaxProfile() {
@@ -776,7 +812,7 @@ function handleAmountSelection(event) {
   const customAmountEl = document.getElementById('customAmount');
   if (customAmountEl) customAmountEl.value = '';
   
-  calculateComparison();
+  markComparisonAsStale();
 }
 
 function handleCustomAmount(event) {
@@ -784,7 +820,7 @@ function handleCustomAmount(event) {
   appState.amount = amount;
   
   document.querySelectorAll('.amount-btn').forEach(btn => btn.classList.remove('active'));
-  calculateComparison();
+  markComparisonAsStale();
 }
 
 function updateCdTermOptions() {
@@ -902,6 +938,8 @@ function calculateComparison() {
   // Update UI
   updateComparisonResults();
   updateComparisonChart();
+  markComparisonAsFresh(); // Reset button state
+  saveScenarioToServer();
   
   // Show results section
   const resultsEl = document.getElementById('results');
@@ -913,6 +951,46 @@ function calculateComparison() {
   if (enhancedAnalysisEl) {
     enhancedAnalysisEl.style.display = 'block';
   }
+}
+
+function markComparisonAsStale() {
+  const compareBtn = document.getElementById('compareBtn');
+  // Only mark as stale if results are already visible
+  if (compareBtn && document.getElementById('results').style.display === 'block') {
+    compareBtn.textContent = '📊 Recalculate Comparison';
+    compareBtn.classList.add('stale');
+  }
+}
+
+function markComparisonAsFresh() {
+    const compareBtn = document.getElementById('compareBtn');
+    if (compareBtn) {
+        compareBtn.textContent = '📊 Compare Investments';
+        compareBtn.classList.remove('stale');
+    }
+}
+
+function saveScenarioToServer() {
+  // Check if Firebase is initialized
+  if (typeof firebase === 'undefined' || !firebase.apps.length) {
+    return; // Silently fail if Firebase is not set up
+  }
+
+  // Create a deep copy of the state to save, including results
+  const scenarioData = JSON.parse(JSON.stringify(appState));
+
+  // Add a timestamp for easier sorting/analysis in Firebase
+  scenarioData.timestamp = new Date().toISOString();
+
+  // Push to a 'scenarios' node in the Realtime Database.
+  // .push() creates a unique, timestamp-based key for each new entry.
+  firebase.database().ref('scenarios').push(scenarioData)
+    .then(() => {
+      console.log('Scenario saved to server successfully.');
+    })
+    .catch((error) => {
+      console.error('Error saving scenario to server:', error);
+    });
 }
 
 function calculateCdReturns() {
