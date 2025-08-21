@@ -227,6 +227,13 @@ function toggleTheme() {
   const newTheme = appState.theme === 'light' ? 'dark' : 'light';
   appState.theme = newTheme;
   document.body.setAttribute('data-color-scheme', newTheme);
+
+  // Re-create charts with the new theme colors
+  createHistoricalTBillChart();
+  if (appState.cdResults && appState.tbillResults) {
+    updateComparisonChart();
+  }
+
   updateThemeUI();
   console.log('Theme toggled to:', newTheme);
 }
@@ -395,6 +402,15 @@ function showAdditionalSections() {
   });
 }
 
+function getChartThemeColors() {
+  const style = getComputedStyle(document.body);
+  return {
+    textColor: style.getPropertyValue('--color-text-secondary').trim(),
+    titleColor: style.getPropertyValue('--color-text').trim(),
+    gridColor: style.getPropertyValue('--color-border').trim()
+  };
+}
+
 function createHistoricalTBillChart() {
   const canvas = document.getElementById('historicalChart');
   if (!canvas) {
@@ -410,6 +426,7 @@ function createHistoricalTBillChart() {
     }
     
     const months = appData.historicalTBillRates["4week"].map(item => item.month);
+    const chartColors = getChartThemeColors();
     
     historicalChart = new Chart(ctx, {
       type: 'line',
@@ -459,6 +476,7 @@ function createHistoricalTBillChart() {
         plugins: {
           legend: {
             position: 'top',
+            color: chartColors.titleColor,
             labels: {
               font: { size: 13, weight: 'bold' },
               usePointStyle: true,
@@ -481,16 +499,27 @@ function createHistoricalTBillChart() {
             min: 3.5,
             max: 4.5,
             ticks: {
+              color: chartColors.textColor,
               callback: function(value) { return value.toFixed(2) + '%'; },
               font: { size: 11 }
             },
-            title: { display: true, text: 'Interest Rate (%)', font: { size: 13, weight: 'bold' } },
-            grid: { color: 'rgba(0,0,0,0.1)' }
+            title: { 
+              display: true, 
+              text: 'Interest Rate (%)', 
+              font: { size: 13, weight: 'bold' },
+              color: chartColors.titleColor
+            },
+            grid: { color: chartColors.gridColor }
           },
           x: {
-            title: { display: true, text: 'Month (2025)', font: { size: 13, weight: 'bold' } },
-            ticks: { font: { size: 11 } },
-            grid: { color: 'rgba(0,0,0,0.1)' }
+            title: { 
+              display: true, 
+              text: 'Month (2025)', 
+              font: { size: 13, weight: 'bold' },
+              color: chartColors.titleColor
+            },
+            ticks: { font: { size: 11 }, color: chartColors.textColor },
+            grid: { color: chartColors.gridColor }
           }
         },
         interaction: { mode: 'nearest', axis: 'x', intersect: false }
@@ -1186,6 +1215,7 @@ function updateComparisonChart() {
   
   const cd = appState.cdResults;
   const tb = appState.tbillResults;
+  const chartColors = getChartThemeColors();
   
   comparisonChart = new Chart(ctx, {
     type: 'bar',
@@ -1211,6 +1241,7 @@ function updateComparisonChart() {
       plugins: {
         legend: {
           position: 'top',
+          color: chartColors.titleColor,
           labels: {
             font: { size: 13, weight: 'bold' },
             usePointStyle: true,
@@ -1229,17 +1260,23 @@ function updateComparisonChart() {
         y: {
           beginAtZero: true,
           ticks: {
+            color: chartColors.textColor,
             callback: function(value) {
               return formatCurrency(value);
             },
             font: { size: 11 }
           },
-          title: { display: true, text: 'Return Amount ($)', font: { size: 13, weight: 'bold' } },
-          grid: { color: 'rgba(0,0,0,0.1)' }
+          title: { 
+            display: true, 
+            text: 'Return Amount ($)', 
+            font: { size: 13, weight: 'bold' },
+            color: chartColors.titleColor
+          },
+          grid: { color: chartColors.gridColor }
         },
         x: {
-          ticks: { font: { size: 11 } },
-          grid: { color: 'rgba(0,0,0,0.1)' }
+          ticks: { font: { size: 11 }, color: chartColors.textColor },
+          grid: { display: false }
         }
       }
     }

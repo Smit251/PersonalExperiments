@@ -92,7 +92,13 @@ State Tax = $0 for T-Bills (exempt in all states)
 
 ## 🔒 Data & Privacy
 
-This application uses Firebase to **anonymously** log calculation scenarios (inputs and results) for the purpose of analytics and application improvement. **No personally identifiable information (PII) such as IP addresses is collected or stored.** User privacy is a top priority.
+ **No personally identifiable information (PII) such as IP addresses is collected or stored.** User privacy is a top priority.
+
+## ⚠️ Disclaimer
+
+This tool is for informational and educational purposes only. While we strive for accuracy, the calculations and data provided may contain errors or be outdated. The information presented does not constitute financial, tax, or legal advice.
+
+**Always consult with a qualified financial advisor before making any investment decisions.**
 
 
 ## 📈 Educational Value
