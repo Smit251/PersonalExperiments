@@ -1,11 +1,11 @@
-# Safe Haven Savings Comparator  
+# CD vs Treasury Bills Professional Comparator
 
 _A professional financial calculator to compare the after-tax returns of Certificate of Deposit (CD) and Treasury Bill (T-Bill) investment strategies._  
 
 ---
 
 ## 📖 Overview  
-**Safe Haven** helps users make informed decisions by providing a **side-by-side comparison** of after-tax returns for:  
+**CD vs Treasury Bills Professional Comparator** helps users make informed decisions by providing a **side-by-side comparison** of after-tax returns for:  
 - A single **CD** investment  
 - A **T-Bill reinvestment (ladder) strategy**  
 
@@ -52,7 +52,6 @@ The calculator uses **projected 2025 federal tax brackets**, **state-specific ta
    - **Summary cards**  
    - **Detailed breakdown**  
    - **Interactive chart**  
-7. Adjust inputs — results update automatically.  
 
 ---
 
