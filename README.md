@@ -1,82 +1,116 @@
-# Safe Haven Savings Comparator  
+# Professional CD vs Treasury Bills Calculator 2025
 
-_A professional financial calculator to compare the after-tax returns of Certificate of Deposit (CD) and Treasury Bill (T-Bill) investment strategies._  
+A sophisticated, modern web application for comparing Certificates of Deposit (CDs) and Treasury Bills (T-Bills). It features accurate 2025 tax calculations, dynamic charts, and professional-grade investment analysis to help users make informed financial decisions.
+
+## 🎯 Overview
+
+This calculator helps users make informed decisions between CDs and T-Bills by providing precise after-tax return comparisons based on 2025 tax law and up-to-date market rates. The tool is designed for both individual investors seeking clarity and financial professionals requiring a robust analysis tool.
+
+## ✨ Key Features
+
+### 💰 Tax Optimization Engine
+- **Accurate 2025 tax calculations** using official IRS tax brackets
+- **State-specific marginal tax rates** for all 50 states + DC
+- **Proper tax flow**: Income → AGI → Taxable Income → Marginal Rates
+- **T-Bill state tax exemption** benefit is automatically calculated
+
+### 🏦 Investment Analysis
+- **Up-to-date market rates** from major banks (Marcus, Ally, etc.) with a clear "Rates as of" date for transparency.
+- **Treasury Bill rates** for all terms (4-week, 13-week, 26-week, 52-week)
+- **Duration matching logic** - proper T-Bill strategies for each CD term
+- **Compounding frequency options** (Daily, Monthly, Quarterly, etc.)
+- **After-tax return comparisons** with clear winner identification
+
+### 📊 Professional Features
+- **Interactive Historical Charts**: Visualize 6 months of T-Bill rate trends.
+- **Dynamic Comparison Charts**: See a visual breakdown of gross vs. after-tax returns.
+- **Alternative Investment Options**: Explore pros and cons of Brokered CDs, Muni Bonds, and more.
+- **Enhanced Tax Analysis**: A collapsible section with detailed calculation tables.
+- **Print-Friendly Analysis Report**: Generate a clean, professional report for sharing.
+
+### 🎨 Modern Interface
+- **Professional design** with light/dark theme support
+- **Clean typography** and intuitive navigation
+- **Real-time calculations** with smooth animations
+- **Accessible color schemes** with proper contrast ratios
+
+## 🚀 Live Demo
+
+The calculator is a single-page web application that runs entirely in the browser - no server required.
+
+## 📋 How to Use
+
+### 1. Tax Profile Setup
+- Enter your annual income and pre-tax deductions
+- Select your filing status and state
+- View calculated AGI, taxable income, and marginal tax rates
+
+### 2. Investment Configuration
+- Set your investment amount
+- Choose CD bank, term, and compounding frequency
+- Select T-Bill term and strategy (Single Purchase or Ladder)
+
+### 3. Compare Results
+- Click the "Compare Investments" button.
+- View side-by-side after-tax return comparison
+- See which investment provides better returns
+- Understand the tax advantages of each option
+
+### 4. Detailed Analysis
+- Expand the "Enhanced Tax Analysis" section for detailed calculation breakdowns.
+- Review historical T-Bill rate trends
+- Explore alternative investment options
+
+## 🔧 Key Calculations
+
+### Tax Flow
+```
+Annual Income - Pre-tax Deductions = AGI
+AGI - Standard Deduction = Taxable Income
+Taxable Income → Marginal Tax Rates (Federal + State)
+```
+
+### After-Tax Returns
+```
+Gross Interest - Federal Tax - State Tax = After-Tax Return
+State Tax = $0 for T-Bills (exempt in all states)
+```
+
+### Duration Matching
+- **3-month CD** ↔ 13-week T-Bill (1x)
+- **6-month CD** ↔ 26-week T-Bill (1x) or 13-week ladder (2x)
+- **12-month CD** ↔ 52-week T-Bill (1x) or 26-week ladder (2x)
+
+## 🏆 Unique Value Proposition
+
+1. **Accurate tax calculations** using current 2025 tax law
+2. **Professional-grade analysis** suitable for financial advisors
+3. **Up-to-date market rates** from major financial institutions, with clear date stamping.
+4. **State tax optimization** highlighting T-Bill advantages
+5. **Duration matching logic** for apples-to-apples comparisons
+6. **Comprehensive education** about alternative investment options
+
+## 🔒 Data & Privacy
+
+This application uses Firebase to **anonymously** log calculation scenarios (inputs and results) for the purpose of analytics and application improvement. **No personally identifiable information (PII) such as IP addresses is collected or stored.** User privacy is a top priority.
+
+
+## 📈 Educational Value
+
+The calculator serves as both a decision-making tool and educational resource, helping users understand:
+- How marginal tax rates affect investment returns
+- The value of T-Bill state tax exemption
+- Proper investment duration matching
+- Alternative safe haven investment options
+- Tax-efficient investment strategies
+
+## 🔄 Regular Updates
+
+- Tax brackets are updated annually for accuracy.
+- Market rates are periodically refreshed to reflect current conditions.
+- New features are added based on user feedback.
+- Design and usability improvements are ongoing.
 
 ---
 
-## 📖 Overview  
-**Safe Haven** helps users make informed decisions by providing a **side-by-side comparison** of after-tax returns for:  
-- A single **CD** investment  
-- A **T-Bill reinvestment (ladder) strategy**  
-
-The calculator uses **projected 2025 federal tax brackets**, **state-specific tax settings**, and an **AGI-based model** to deliver a precise, personalized analysis.  
-
----
-
-## ✨ Key Features  
-
-- **CD vs. T-Bill Comparison**  
-  Clear, side-by-side breakdown of potential after-tax returns.  
-
-- **Advanced Tax Calculations**  
-  - Uses projected **2025 federal tax brackets** and **standard deductions**  
-  - Calculates **Adjusted Gross Income (AGI)** based on user inputs  
-  - Configurable **marginal tax rates** for major states  
-  - Correctly applies **state & local tax exemption** for T-Bill interest  
-
-- **T-Bill Ladder Modeling**  
-  Configure reinvestment strategies by frequency (4-week to 52-week) and model **future rate changes**.  
-
-- **Up-to-Date Rates**  
-  Pre-loaded with recent CD rates from **Marcus, Discover, Capital One**, and the latest **T-Bill auction rates** (as of mid-August 2025).  
-
-- **Interactive Visualization**  
-  Dynamic charts showing growth of **after-tax returns** for both investment types.  
-
-- **Transparent Breakdown**  
-  Collapsible section with inputs and calculated values (AGI, taxable income, marginal rates, etc.).  
-
-- **Responsive & Themed UI**  
-  Modern interface with **light/dark mode**, optimized for both desktop and mobile.  
-
----
-
-## 🚀 How to Use  
-
-1. Open **`index.html`** in any modern web browser.  
-2. Enter your **Tax Profile**: annual gross income, filing status, and any pre-tax deductions (401k/HSA, etc.).  
-3. Enter your **Investment Amount**.  
-4. Select a **CD Option** (sets the rate & time period for comparison).  
-5. Configure the **T-Bill Strategy**: reinvestment frequency and projected rate changes.  
-6. Review results in:  
-   - **Summary cards**  
-   - **Detailed breakdown**  
-   - **Interactive chart**  
-7. Adjust inputs — results update automatically.  
-
----
-
-## 📊 Data & Assumptions  
-
-- **Federal Tax Data**  
-  Based on projected **2025 IRS tax brackets** and standard deduction.  
-
-- **State Tax Data**  
-  Simplified progressive tax brackets for major states (not covering all state-specific nuances, deductions, or credits).  
-
-- **Interest Rates**  
-  Static CD and T-Bill rates based on data from **mid-August 2025** for consistent comparison.  
-
-- **T-Bill Reinvestment**  
-  Assumes full reinvestment of principal + interest into a new T-Bill of the same duration at maturity.  
-
----
-
-## ⚠️ Disclaimer  
-
-This calculator is for **educational and planning purposes only**.  
-- Tax calculations may not reflect your individual situation.  
-- It is **not financial advice**.  
-- Always consult a **qualified financial advisor** or tax professional before making investment decisions.  
-
----
+**Built for the 2025 tax year with current market rates and professional-grade accuracy.**
