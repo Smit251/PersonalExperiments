@@ -1052,10 +1052,10 @@ function updateRecommendation() {
   
   let recommendation = '';
   
-  if (difference > 50) {
-    recommendation = `Treasury Bills provide superior after-tax returns by ${formatCurrency(difference)} (${percentageDiff}% advantage). T-Bills offer state tax exemption benefits and full government backing, making them particularly attractive for high-tax-state investors.`;
-  } else if (difference < -50) {
-    recommendation = `Certificate of Deposit provides superior after-tax returns by ${formatCurrency(Math.abs(difference))} (${percentageDiff}% advantage). CDs offer FDIC insurance and predictable fixed returns, making them ideal for conservative investors seeking guaranteed outcomes.`;
+  if (difference > 5) {
+    recommendation = `Treasury Bills provide superior after-tax returns by ${formatCurrency(difference)} (${percentageDiff}% advantage).`;
+  } else if (difference < -5) {
+    recommendation = `Certificate of Deposit provides superior after-tax returns by ${formatCurrency(Math.abs(difference))} (${percentageDiff}% advantage).`;
   } else {
     recommendation = `Both investments provide similar after-tax returns (difference: ${formatCurrency(Math.abs(difference))}). Consider T-Bills for state tax advantages and government backing, or CDs for FDIC insurance and fixed predictable returns.`;
   }

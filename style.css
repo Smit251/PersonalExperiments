@@ -696,6 +696,7 @@ select.form-control:hover {
   background: rgba(255,255,255,0.15);
   border: 1px solid rgba(255,255,255,0.3);
   color: white;
+  -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
   transition: all var(--duration-normal) var(--ease-standard);
 }
@@ -1039,11 +1040,6 @@ select.form-control:hover {
   border-left: 4px solid var(--color-mint);
 }
 
-.alternative-options .card__header h2,
-.historical-trends .card__header h2 {
-  /* This will be overridden below */
-}
-
 .alternative-options .card__header h2 {
   color: var(--color-mint);
 }
@@ -1281,6 +1277,8 @@ select.form-control:hover {
   border-radius: var(--radius-lg);
   padding: var(--space-24);
   box-shadow: var(--shadow-professional);
+  position: relative; /* Good practice for chart containers */
+  height: 450px;
 }
 
 /* Enhanced Analysis Section */

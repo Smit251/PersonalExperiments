@@ -65,7 +65,7 @@
             </section>
 
             <!-- 2. Tax Calculation Summary -->
-            <section class="card tax-summary" id="taxSummary" style="display: none;">
+            <section class="card tax-summary hidden" id="taxSummary">
                 <div class="card__header">
                     <h2>Tax Calculation Summary</h2>
                     <span class="help-text">Comprehensive 2025 tax calculation with accurate marginal rates</span>
@@ -310,7 +310,7 @@
                     <!-- Returns Comparison Analysis Chart -->
                     <div class="chart-section">
                         <h3>📊 Returns Comparison Analysis</h3>
-                        <div class="chart-container" style="position: relative; height: 400px;">
+                        <div class="chart-container">
                             <canvas id="comparisonChart"></canvas>
                         </div>
                     </div>
@@ -325,7 +325,7 @@
                         <button class="btn btn--outline btn--sm" id="toggleEnhancedAnalysis">Show Details</button>
                     </div>
                 </div>
-                <div class="card__body enhanced-analysis-content" id="enhancedAnalysisContent" style="display: none;">
+                <div class="card__body enhanced-analysis-content hidden" id="enhancedAnalysisContent">
                     <div class="analysis-section compact">
                         <div class="compact-analysis-grid">
                             <div class="compact-item">
@@ -398,7 +398,7 @@
                 </div>
                 <div class="card__body">
                     <div class="chart-section">
-                        <div class="chart-container" style="position: relative; height: 400px;">
+                        <div class="chart-container">
                             <canvas id="historicalChart"></canvas>
                         </div>
                     </div>
